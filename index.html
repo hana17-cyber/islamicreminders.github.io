@@ -213,6 +213,15 @@
       <button onclick="sendMessage()" style="width:100%; margin-top:10px;">Send</button>
     </div>
 
+    <!-- Islamic Quiz Card -->
+    <div class="card">
+      <h2>📚 Islamic Quiz</h2>
+      <p id="question" style="margin-bottom: 15px;"></p>
+      <button id="btn1" onclick="answerQuiz(true)" style="margin-bottom: 10px;"></button>
+      <button id="btn2" onclick="answerQuiz(false)" style="margin-bottom: 10px;"></button>
+      <p id="score" style="margin-top: 10px; font-weight: 600; color: #86efac;"></p>
+    </div>
+
   </div>
 </div>
 
@@ -377,8 +386,52 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Show a verse on page load
-window.addEventListener('load', getQuranVerse);
+// Islamic Quiz Code
+let quizCurrent = 0;
+let quizScore = 0;
+
+const quizQuestions = [
+  { q: "How many pillars of Islam are there?", a1: "5", a2: "3", correct: true },
+  { q: "What is the holy book of Islam?", a1: "Quran", a2: "Bible", correct: true },
+  { q: "How many daily prayers are required?", a1: "5", a2: "2", correct: true },
+  { q: "In which month do Muslims fast?", a1: "Ramadan", a2: "Muharram", correct: true },
+  { q: "What is the Islamic declaration of faith called?", a1: "Shahada", a2: "Takbir", correct: true },
+  { q: "Who is the final Prophet in Islam?", a1: "Muhammad", a2: "Jesus", correct: true },
+  { q: "What is the direction Muslims face when praying?", a1: "Kaaba in Makkah", a2: "Jerusalem", correct: true },
+  { q: "Is Zakat (charity) mandatory in Islam?", a1: "Yes", a2: "No", correct: true }
+];
+
+function loadQuizQuestion() {
+  if (quizCurrent >= quizQuestions.length) {
+    document.getElementById("question").innerText = "🎉 Quiz Finished!";
+    document.getElementById("btn1").style.display = "none";
+    document.getElementById("btn2").style.display = "none";
+    document.getElementById("score").innerText = `Your score: ${quizScore}/${quizQuestions.length}`;
+    return;
+  }
+
+  const q = quizQuestions[quizCurrent];
+  document.getElementById("question").innerText = q.q;
+  document.getElementById("btn1").innerText = q.a1;
+  document.getElementById("btn2").innerText = q.a2;
+  document.getElementById("score").innerText = `Question ${quizCurrent + 1}/${quizQuestions.length}`;
+}
+
+function answerQuiz(isCorrect) {
+  if (isCorrect === quizQuestions[quizCurrent].correct) {
+    quizScore++;
+  }
+
+  quizCurrent++;
+  loadQuizQuestion();
+}
+
+// Load first quiz question on page load
+window.addEventListener('load', function() {
+  getQuranVerse();
+  loadQuizQuestion();
+});
+
 </script>
 
 </body>
