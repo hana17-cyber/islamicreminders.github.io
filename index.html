@@ -205,6 +205,14 @@
       <div id="dua-results" class="content" style="display:none;"></div>
     </div>
 
+    <!-- Islamic Assistant Card -->
+    <div class="card">
+      <h2>🤖 Ask the Islamic Assistant</h2>
+      <div id="chatBox" style="text-align:left; max-height:250px; overflow-y:auto; background:#0b1220; padding:10px; border-radius:10px; margin-bottom:10px; font-size:0.95rem;"></div>
+      <input id="userInput" type="text" placeholder="Ask something..." style="width:100%;">
+      <button onclick="sendMessage()" style="width:100%; margin-top:10px;">Send</button>
+    </div>
+
   </div>
 </div>
 
@@ -312,6 +320,62 @@ function showError(elementId, message) {
   resultsDiv.style.display = "block";
   resultsDiv.classList.add("error");
 }
+
+function sendMessage() {
+  const input = document.getElementById("userInput").value.trim();
+  const chatBox = document.getElementById("chatBox");
+
+  if (!input) return;
+
+  // Display user message
+  const userMsg = document.createElement("p");
+  userMsg.innerHTML = `<strong style="color:#86efac;">You:</strong> ${input}`;
+  chatBox.appendChild(userMsg);
+
+  let reply = "";
+
+  // Simple AI logic based on keywords
+  const lowerInput = input.toLowerCase();
+  if (lowerInput.includes("prayer") || lowerInput.includes("salah")) {
+    reply = "Prayer (Salah) is one of the five pillars of Islam. Make sure to pray on time and with full concentration 🤲";
+  } else if (lowerInput.includes("quran") || lowerInput.includes("surah")) {
+    reply = "The Quran is the word of Allah revealed to Prophet Muhammad ﷺ. It contains guidance for all of humanity 📖";
+  } else if (lowerInput.includes("hadith")) {
+    reply = "Hadith are the sayings and teachings of Prophet Muhammad ﷺ. They help us understand the Quran better 📚";
+  } else if (lowerInput.includes("dua") || lowerInput.includes("supplication")) {
+    reply = "Du'a is a conversation with Allah. Never hesitate to ask Allah for what you need, in any language 💬";
+  } else if (lowerInput.includes("fasting") || lowerInput.includes("ramadan")) {
+    reply = "Fasting during Ramadan is one of the five pillars of Islam. It purifies the soul and teaches us discipline 🌙";
+  } else if (lowerInput.includes("hajj") || lowerInput.includes("pilgrimage")) {
+    reply = "Hajj is the pilgrimage to Makkah, one of the five pillars of Islam. It's a spiritual journey of devotion ⛪";
+  } else if (lowerInput.includes("zakat") || lowerInput.includes("charity")) {
+    reply = "Zakat is obligatory charity in Islam. It purifies your wealth and helps those in need 🤝";
+  } else if (lowerInput.includes("hello") || lowerInput.includes("hi") || lowerInput.includes("assalamu")) {
+    reply = "Wa alaikum assalam wa rahmatullahi wa barakatuh! How can I help you with Islamic guidance? 🌙";
+  } else {
+    reply = "I'm here to help with Islamic reminders! Ask me about prayer times, Quran verses, du'as, hadith, fasting, hajj, zakat, or anything else Islamic 🕌";
+  }
+
+  // Display AI reply
+  const aiMsg = document.createElement("p");
+  aiMsg.innerHTML = `<strong style="color:#86efac;">Assistant:</strong> ${reply}`;
+  chatBox.appendChild(aiMsg);
+
+  // Scroll to bottom
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  // Clear input
+  document.getElementById("userInput").value = "";
+}
+
+// Allow Enter key to send message
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("userInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  });
+});
 
 // Show a verse on page load
 window.addEventListener('load', getQuranVerse);
