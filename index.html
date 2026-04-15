@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Islamic Reminders</title>
+
   <style>
     body {
       margin: 0;
@@ -12,27 +13,97 @@
       color: white;
       text-align: center;
     }
+
     header {
       background: #14532d;
-      padding: 30px;
+      padding: 25px;
     }
+
     h1 {
       margin: 0;
-      font-size: 2.5rem;
+      font-size: 2.2rem;
     }
+
     .container {
       padding: 20px;
     }
+
+    .card {
+      background: #1e293b;
+      margin: 15px auto;
+      padding: 15px;
+      border-radius: 12px;
+      max-width: 500px;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 200px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #14532d;
+      color: white;
+      cursor: pointer;
+      margin-left: 5px;
+    }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>Islamic Reminders</h1>
-  </header>
-  <div class="container">
-    <h2>Welcome to Islamic Reminders</h2>
-    <p>Find daily reminders and inspiration from Islamic teachings.</p>
-    <p>Remember: "The best among you are those who have the best manners and character." - Prophet Muhammad (PBUH)</p>
+
+<header>
+  <h1>🌙 Islamic Reminders</h1>
+  <p>Find daily prayer times by city</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Enter Your City</h2>
+    <input id="city" placeholder="e.g. Seattle" />
+    <button onclick="getPrayerTimes()">Get Times</button>
   </div>
+
+  <div class="card" id="results">
+    <h2>Prayer Times</h2>
+    <p>Enter a city to see times</p>
+  </div>
+
+</div>
+
+<script>
+async function getPrayerTimes() {
+  const city = document.getElementById("city").value;
+
+  if (!city) {
+    alert("Please enter a city");
+    return;
+  }
+
+  const url = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=US&method=2`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  const times = data.data.timings;
+
+  document.getElementById("results").innerHTML = `
+    <h2>Prayer Times for ${city}</h2>
+    <p>Fajr: ${times.Fajr}</p>
+    <p>Dhuhr: ${times.Dhuhr}</p>
+    <p>Asr: ${times.Asr}</p>
+    <p>Maghrib: ${times.Maghrib}</p>
+    <p>Isha: ${times.Isha}</p>
+  `;
+}
+</script>
+
 </body>
 </html>
